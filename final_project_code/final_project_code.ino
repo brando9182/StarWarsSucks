@@ -7,10 +7,13 @@
 void setup() {
   Serial.begin(9200);
   InitCompassPins();
+  initDistanceSensorPins();
   //make sure to call this last
-  orient();
+  //orient();
 }
 
 void loop() {
-  
+  while(true){
+    Serial.println(isChipIn());
+  }
 }

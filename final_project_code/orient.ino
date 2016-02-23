@@ -9,14 +9,14 @@ void InitCompassPins(){
 //main function
 //loops until oriented properly
 void orient(){
-  int compass_value = 0;
-  while(SENSORS_MAGFIELD_EARTH_MAX - COMPASS_TOLERANCE > compassValue){
-    compass_value = ReadFromCompass();
-    Serial.print("compass = ");
-    Serial.println(compass_value);
-    turn(CW, ORIENT_TURNING_SPEED);
-  }
-  return;
+//  int compass_value = 0;
+//  while(SENSORS_MAGFIELD_EARTH_MAX - COMPASS_TOLERANCE > compassValue){
+//    compass_value = ReadFromCompass();
+//    Serial.print("compass = ");
+//    Serial.println(compass_value);
+//    turn(CW, ORIENT_TURNING_SPEED);
+//  }
+//  return;
 }
 
 int ReadFromCompass(){

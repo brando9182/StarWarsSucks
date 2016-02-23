@@ -30,7 +30,7 @@ bool frontRightProximity(bool desired_state){
   proximityValueFront = analogRead(proximityPinFront);
   proximityValueRight = analogRead(proximityPinRight);
   
-  if(proximityValueFront - minProxDifference > proximityValueRight){
+  if(proximityValueFront - MIN_PROX_DIFFERENCE > proximityValueRight){
     return true;
   }
   else{
@@ -43,13 +43,13 @@ bool frontRightProximity(bool desired_state){
 //for orienting in the beggining of the round
 void distanceSensorTest(){
   //Read value from proximity sensor
-  proximityValue1 = analogRead(proximityPin1);
-  proximityValue2 = analogRead(proximityPin2);
-  Serial.print("proximitySensor1 = ");
-  Serial.println(proximityValue1);
-  Serial.print("proximitySensor2 = ");
-  Serial.println(proximityValue2);
-  if(proximityValue1 - minProxDifference > proximityValue2){
+  proximityValueFront = analogRead(proximityPinFront);
+  proximityValueRight = analogRead(proximityPinRight);
+  Serial.print("proximitySensorFront = ");
+  Serial.println(proximityValueFront);
+  Serial.print("proximitySensorRight = ");
+  Serial.println(proximityValueRight);
+  if(proximityValueFront - MIN_PROX_DIFFERENCE > proximityValueRight){
     Serial.println("Faccing correct direction");
   }
   Serial.println("-----------------------");
