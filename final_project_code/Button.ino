@@ -2,6 +2,10 @@
 //    Button interface
 //    Note the LED pin is not super necessary
 //    Recomend delaying, see isButtonPressed() comments
+//    ON THE  LED:
+//    Leftmost anf right most pins control light
+//    Center right and middle right give you a resistance when not pushed
+//    Center right and middle left give you a resistance when pushed
 ///////////////////////////////////////////////////////
 
 int buttonPin = 2;
