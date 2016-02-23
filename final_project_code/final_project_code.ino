@@ -6,14 +6,18 @@
 
 void setup() {
   Serial.begin(9200);
-  InitCompassPins();
-  initDistanceSensorPins();
+  InitButton();
   //make sure to call this last
   //orient();
 }
 
 void loop() {
+  setButtonLED(HIGH);
   while(true){
-    Serial.println(isChipIn());
+    Serial.println(isButtonPressed());
+    if(isButtonPressed()){
+      delay(500);
+      toggleButtonLED();
+    }
   }
 }
