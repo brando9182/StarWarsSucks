@@ -50,9 +50,9 @@ void distanceSensorTest(){
   Serial.print("proximitySensorRight = ");
   Serial.println(proximityValueRight);
   if(proximityValueFront - MIN_PROX_DIFFERENCE > proximityValueRight){
-    Serial.println("Faccing correct direction");
+    Serial.println("Facing correct direction");
   }
   Serial.println("-----------------------");
-  delay(1000);
+  delay(500);
 }
 

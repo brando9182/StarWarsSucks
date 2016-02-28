@@ -38,7 +38,7 @@ void setButtonLED(bool power){
     buttonLEDStatus = power;              //update button LED status
 }
 
-void toggleButtonLED(){
+void ToggleButtonLED(){
   if(buttonLEDStatus == HIGH){
     digitalWrite(buttonLEDPin, LOW);
     buttonLEDStatus = LOW;
