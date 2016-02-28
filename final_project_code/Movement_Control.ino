@@ -5,15 +5,12 @@ static const uint8_t MOTOR_LOWEST_PULSE   = 0;
 static const uint8_t MOTOR_MID_PULSE      = 127;
 static const uint8_t MOTOR_HIGHEST_PULSE  = 255;
 
-static const uint8_t LINE_SENSOR_THRSHLD  = 200;  //tentative value
-static const uint8_t TOKEN_SENSOR_THRSHLD = 250; //1k pull-up resistor, tentative
-
 /*---------------------------Definitions-------------------------------------*/
 //Pin declarations
-#define MOTOR_DIRECTION_PIN_1 3
-#define MOTOR_DIRECTION_PIN_2 5
-#define MOTOR_ENABLE_PIN_1    2
-#define MOTOR_ENABLE_PIN_2    4
+#define MOTOR_DIRECTION_PIN_1 2
+#define MOTOR_DIRECTION_PIN_2 4
+#define MOTOR_ENABLE_PIN_1    3
+#define MOTOR_ENABLE_PIN_2    5
 
 //General declarations
 #define DEBOUNCE_LENGTH       1  //min stability period, measured in milliseconds
@@ -34,9 +31,11 @@ void intializeMotors (void) {
   pinMode(MOTOR_DIRECTION_PIN_2, OUTPUT);
   pinMode(MOTOR_ENABLE_PIN_1, OUTPUT);
   pinMode(MOTOR_ENABLE_PIN_2, OUTPUT);
-  
-  digitalWrite(MOTOR_ENABLE_PIN_1, HIGH); //set intially off
 
+  digitalWrite(MOTOR_DIRECTION_PIN_1, HIGH); //set to one direction 
+  digitalWrite(MOTOR_DIRECTION_PIN_2, HIGH); //set to one direction 
+  digitalWrite(MOTOR_ENABLE_PIN_1, LOW); 
+  digitalWrite(MOTOR_ENABLE_PIN_2, LOW);  
 }
 
  void drive_motor_direction_toggle (uint8_t motorNumber) {
@@ -46,30 +45,32 @@ void intializeMotors (void) {
   if ((motorNumber = 1) & digitalRead(MOTOR_DIRECTION_PIN_2)) digitalWrite(MOTOR_DIRECTION_PIN_2, LOW);
 }
 
-//dont want to wasste a pin
-//void stop_drive_motor (uint8_t motorNumber) {
-//  if (motorNumber = 0) analogWrite(MOTOR_ENABLE_PIN_1, 127);
-//  if (motorNumber = 1) analogWrite(MOTOR_ENABLE_PIN_2, 127);
-//}
+
+void stop_drive_motor (uint8_t motorNumber) {
+  if (motorNumber = 0) analogWrite(MOTOR_ENABLE_PIN_1, 127);
+  if (motorNumber = 1) analogWrite(MOTOR_ENABLE_PIN_2, 127);
+}
 
 void set_motor_speed (uint8_t motorNumber, uint8_t motorSpeed) {
   uint8_t pulseLength;
-  if ((motorNumber = 0) & !digitalRead(MOTOR_DIRECTION_PIN_1)) {
-    pulseLength = map(motorSpeed, 0, MOTOR_TOP_SPEED, MOTOR_MID_PULSE, MOTOR_LOWEST_PULSE);
-    analogWrite(MOTOR_ENABLE_PIN_1, pulseLength);
+  if(motorSpeed > 255) motorSpeed = 255; //saturate
+  //spinning one direction
+  if ((motorNumber == 0) && !digitalRead(MOTOR_DIRECTION_PIN_1)) {
+    analogWrite(MOTOR_ENABLE_PIN_1, motorSpeed);
   }
-  if ((motorNumber = 1) & !digitalRead(MOTOR_DIRECTION_PIN_2)) {
-    pulseLength = map(motorSpeed, 0, MOTOR_TOP_SPEED, MOTOR_MID_PULSE, MOTOR_LOWEST_PULSE);
-    analogWrite(MOTOR_ENABLE_PIN_2, pulseLength);
+  if ((motorNumber == 1) && !digitalRead(MOTOR_DIRECTION_PIN_2)) {
+    analogWrite(MOTOR_ENABLE_PIN_2, motorSpeed);
   }
-  if ((motorNumber = 0) & digitalRead(MOTOR_DIRECTION_PIN_1)) {
-    pulseLength = map(motorSpeed, 0, MOTOR_TOP_SPEED, MOTOR_MID_PULSE, MOTOR_HIGHEST_PULSE);
-    analogWrite(MOTOR_ENABLE_PIN_1, pulseLength);
+  
+  //spinning the other direction
+  if ((motorNumber == 0) && digitalRead(MOTOR_DIRECTION_PIN_1)) {
+    analogWrite(MOTOR_ENABLE_PIN_1, motorSpeed);
   }
-  if ((motorNumber = 1) & digitalRead(MOTOR_DIRECTION_PIN_2)) {
-    pulseLength = map(motorSpeed, 0, MOTOR_TOP_SPEED, MOTOR_MID_PULSE, MOTOR_HIGHEST_PULSE);
-    analogWrite(MOTOR_ENABLE_PIN_2, pulseLength);
+  if ((motorNumber == 1) && digitalRead(MOTOR_DIRECTION_PIN_2)) {
+    analogWrite(MOTOR_ENABLE_PIN_2, motorSpeed);
   }
 }
+
+//analog write 0 - 255, no need for remapping
 
 
