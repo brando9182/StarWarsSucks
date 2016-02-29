@@ -1,54 +1,28 @@
-//WORK IN PROGRESS
-
 /*-----------------------------Includes--------------------------------------*/
 /*---------------------------Definitions-------------------------------------*/
-//minimum difference between IR sensors for one to be cosidered
-//facing the wall and the other one not
-#define MIN_PROX_DIFFERENCE 100 
-#define FRONT_CLEAR_RIGHT_BLOCKED 0
-#define FRONT_BLOCKED_RIGHT_CLEAR 1
+#define LONG_DISTANCE_SENSOR_PIN_0  A0
+#define LONG_DISTANCE_SENSOR_PIN_1  A1
+#define SHORT_DISTANCE_SENSOR_PIN   A2
 
 /*---------------------------Constants---------------------------------------*/
-static int proximityPinFront = A0;
-static int proximityValueFront = 0;
-static int proximityPinRight = A1;
-static int proximityValueRight = 0; 
-
 /*---------------------------Module Variables--------------------------------*/
 /*-----------------------------Public Functions------------------------------*/
-void initDistanceSensorPins (void){
+void init_distance_sensor (void){
 }
 
-//will check status of front facing and right facing proximity sensors
-//if the condition specified is true, returns true
-//note uses the differnce threshold defined above 
-//TODO: needs tuning
-bool frontRightProximity(bool desired_state){
-  proximityValueFront = analogRead(proximityPinFront);
-  proximityValueRight = analogRead(proximityPinRight);
-  if(proximityValueFront - MIN_PROX_DIFFERENCE > proximityValueRight){
-    return true;
-  }
-  else{
-    return false;
-  }
+//Returns distance (once calibrated in cm) [WORK IN PROGRESS]
+uint8_t long_distance_sensor_report (uint8_t sensorNumber){
+  uint8_t rawValue;
+  if (sensorNumber == 0) rawValue = analogRead(LONG_DISTANCE_SENSOR_PIN_0);
+  if (sensorNumber == 1) rawValue = analogRead(LONG_DISTANCE_SENSOR_PIN_1);
+  
+  return 0; //Extract mapping function from datasheet
 }
 
-//use for testing the distance sensors
-//includes a facing correct direction statement
-//for orienting in the beggining of the round
-void distanceSensorTest(){
-  //Read value from proximity sensor
-  proximityValueFront = analogRead(proximityPinFront);
-  proximityValueRight = analogRead(proximityPinRight);
-  Serial.print("proximitySensorFront = ");
-  Serial.println(proximityValueFront);
-  Serial.print("proximitySensorRight = ");
-  Serial.println(proximityValueRight);
-  if(proximityValueFront - MIN_PROX_DIFFERENCE > proximityValueRight){
-    Serial.println("Facing correct direction");
-  }
-  Serial.println("-----------------------");
-  delay(500);
+//Returns distance (once calibrated in cm) [WORK IN PROGRESS]
+uint8_t short_distance_sensor_report (void){
+  uint8_t rawValue = analogRead(SHORT_DISTANCE_SENSOR_PIN);
+  
+  return 0; //Extract mapping function from datasheet
 }
 

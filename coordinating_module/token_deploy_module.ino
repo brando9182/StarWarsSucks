@@ -2,18 +2,18 @@
 #include <Servo.h>
 
 /*---------------------------Definitions-------------------------------------*/
-#define DEPLOYMENT_SERVO_PIN            10
+#define DEPLOYMENT_SERVO_PIN            10 //not yet set
 #define DEPLOYMENT_MAX_TOKENS           12
 
 /*---------------------------Constants---------------------------------------*/
 static uint8_t slots[DEPLOYMENT_MAX_TOKENS] = {88, 81, 73, 65, 58, 51, 44, 36, 29, 21, 14, 7};
-Servo deployment_servo;
+static Servo deployment_servo;
 
 /*---------------------------Module Variables--------------------------------*/
 uint8_t deployment_position_curr = 0;
 
 /*----------------------------Public Functions-------------------------------*/
-void init_deploy_tokens (void) {
+void init_token_deploy (void) {
   deployment_servo.attach(DEPLOYMENT_SERVO_PIN);
 }
 

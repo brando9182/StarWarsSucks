@@ -7,14 +7,17 @@
 void setup() {
   Serial.begin(9600);
   while(!Serial); //wait for serial to finish setting up
-  init_motors ();
+  init_button();
+  init_motors();
+  init_distance_sensor();
+  init_ending_timer();
+  init_light_ring();
+  init_line_sensor();
+  init_token_deploy();
+  init_compass();
+  init_token_sensors();
 }
 
 void loop() {
-//  for(int i = 20; i < 100; i++){
-//    set_motor_speed(0, i);
-//    set_motor_speed(1, i);
-//    Serial.println(i);
-//    delay(500);
-//  }
+  //Place coordinating state machine here
 }

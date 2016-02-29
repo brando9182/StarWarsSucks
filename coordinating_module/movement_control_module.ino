@@ -1,9 +1,9 @@
 /*-----------------------------Includes--------------------------------------*/
 /*---------------------------Definitions-------------------------------------*/
-#define MOTOR_DIRECTION_PIN_1 2
-#define MOTOR_DIRECTION_PIN_2 4
-#define MOTOR_ENABLE_PIN_1    3
-#define MOTOR_ENABLE_PIN_2    5
+#define MOTOR_DIRECTION_PIN_1   6
+#define MOTOR_ENABLE_PIN_1      5
+#define MOTOR_DIRECTION_PIN_2   4
+#define MOTOR_ENABLE_PIN_2      12
 
 /*---------------------------Constants---------------------------------------*/
 static const uint8_t MOTOR_LOWEST_PULSE   = 0;
