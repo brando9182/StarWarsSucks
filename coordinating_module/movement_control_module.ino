@@ -1,32 +1,18 @@
-
+/*-----------------------------Includes--------------------------------------*/
+/*---------------------------Definitions-------------------------------------*/
+#define MOTOR_DIRECTION_PIN_1 2
+#define MOTOR_DIRECTION_PIN_2 4
+#define MOTOR_ENABLE_PIN_1    3
+#define MOTOR_ENABLE_PIN_2    5
 
 /*---------------------------Constants---------------------------------------*/
 static const uint8_t MOTOR_LOWEST_PULSE   = 0;
 static const uint8_t MOTOR_MID_PULSE      = 127;
 static const uint8_t MOTOR_HIGHEST_PULSE  = 255;
 
-/*---------------------------Definitions-------------------------------------*/
-//Pin declarations
-#define MOTOR_DIRECTION_PIN_1 2
-#define MOTOR_DIRECTION_PIN_2 4
-#define MOTOR_ENABLE_PIN_1    3
-#define MOTOR_ENABLE_PIN_2    5
-
-//General declarations
-#define DEBOUNCE_LENGTH       1  //min stability period, measured in milliseconds
-#define INDICATOR_LED_NUM     16
-#define INDICATOR_PULSE       5
-#define COMPASS_ADDRESS       0x1E
-#define MOTOR_TOP_SPEED       500
-
 /*---------------------------Module Variables--------------------------------*/
-static unsigned char output_pin;
-static unsigned int remaining_toggles;
-static unsigned char ticks_per_interrupt;
-
-/*---------------------------Public Function Definitions---------------------*/
-
-void intializeMotors (void) {
+/*-----------------------------Public Functions------------------------------*/
+void init_motors (void) {
   pinMode(MOTOR_DIRECTION_PIN_1, OUTPUT);
   pinMode(MOTOR_DIRECTION_PIN_2, OUTPUT);
   pinMode(MOTOR_ENABLE_PIN_1, OUTPUT);
@@ -70,7 +56,4 @@ void set_motor_speed (uint8_t motorNumber, uint8_t motorSpeed) {
     analogWrite(MOTOR_ENABLE_PIN_2, motorSpeed);
   }
 }
-
-//analog write 0 - 255, no need for remapping
-
 
