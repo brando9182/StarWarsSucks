@@ -36,11 +36,6 @@ Serial.println("all components initialized");
 }
 
 void loop() {
-  digitalWrite(MOTOR_DIRECTION_PIN_1, HIGH);
-  digitalWrite(MOTOR_DIRECTION_PIN_2, HIGH); //set to one direction 
-  analogWrite(MOTOR_ENABLE_PIN_1, 255); 
-  analogWrite(MOTOR_ENABLE_PIN_2, 255); 
-  Serial.println("looping"); 
   //set_motor_speed (0, 100);
   //set_motor_speed (1, 100);
 
