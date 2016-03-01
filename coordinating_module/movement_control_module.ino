@@ -31,12 +31,16 @@ void init_motors (void) {
   pinMode(MOTOR_ENABLE_PIN_1, OUTPUT);
   pinMode(MOTOR_ENABLE_PIN_2, OUTPUT);
 
+  digitalWrite(MOTOR_DIRECTION_PIN_1, HIGH);
+  digitalWrite(MOTOR_DIRECTION_PIN_2, HIGH);
   //doesn't always work the first time
-  for(int i = 0; i < 4; i++){
+  for(int i = 0; i < 5; i++){
     analogWrite(MOTOR_ENABLE_PIN_1, 255); 
-    analogWrite(MOTOR_ENABLE_PIN_2, 255);  
   }
 
+  for(int i = 0; i < 5; i++){
+    analogWrite(MOTOR_ENABLE_PIN_2, 255);  
+  }
 }
 /////////////////"Nicer Functions"//////////////////////////////
 void drive_forward(float mps){
