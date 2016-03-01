@@ -2,7 +2,7 @@
 #include <Timers.h>
 
 /*---------------------------Definitions-------------------------------------*/
-#define BUTTON_PIN       13
+//#define BUTTON_PIN       13
 #define DEBOUNCE_LENGTH  2  //min stability period, measured in milliseconds
 #define TIMER_DEBOUNCE   1
 

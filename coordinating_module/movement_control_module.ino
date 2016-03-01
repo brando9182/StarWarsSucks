@@ -31,13 +31,15 @@ void init_motors (void) {
   pinMode(MOTOR_ENABLE_PIN_1, OUTPUT);
   pinMode(MOTOR_ENABLE_PIN_2, OUTPUT);
 
-  digitalWrite(MOTOR_DIRECTION_PIN_1, HIGH); //set to one direction 
-  digitalWrite(MOTOR_DIRECTION_PIN_2, HIGH); //set to one direction 
-  digitalWrite(MOTOR_ENABLE_PIN_1, LOW); 
-  digitalWrite(MOTOR_ENABLE_PIN_2, LOW);  
+  //doesn't always work the first time
+  for(int i = 0; i < 4; i++){
+    analogWrite(MOTOR_ENABLE_PIN_1, 255); 
+    analogWrite(MOTOR_ENABLE_PIN_2, 255);  
+  }
+
 }
 /////////////////"Nicer Functions"//////////////////////////////
-void drive_forward(uint8_t mps){
+void drive_forward(float mps){
   uint8_t volts = mps * MPS_TO_VOLTAGE;
   
   set_motor_direction(RIGHT_MOTOR, FORWARD);
