@@ -3,7 +3,7 @@
 #include <Adafruit_NeoPixel.h>
 
 /*---------------------------Definitions-------------------------------------*/
-//#define INDICATOR_PIN       12
+#define INDICATOR_PIN     13 //confirmed
 #define INDICATOR_LED_NUM   16
 #define INDICATOR_PULSE     5
 #define TIMER_INDICATOR     0
@@ -24,6 +24,7 @@ void indicator_blanket_set (uint8_t r, uint8_t g, uint8_t b, uint8_t w) {
   for (int i = 0; i < INDICATOR_LED_NUM; i++) {
     pixels.setPixelColor(i, pixels.Color(r,g,b,w));
   }
+  pixels.show();
 }
 
 void indicator_pulse (void) {

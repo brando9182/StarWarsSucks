@@ -2,8 +2,8 @@
 /*---------------------------Definitions-------------------------------------*/
 #define MOTOR_DIRECTION_PIN_1   6
 #define MOTOR_ENABLE_PIN_1      5
-#define MOTOR_DIRECTION_PIN_2   4
-#define MOTOR_ENABLE_PIN_2      3
+#define MOTOR_DIRECTION_PIN_2   12 //originally pin 4
+#define MOTOR_ENABLE_PIN_2      3 //originally pin 12
 //defined in main files
 //#define RIGHT_MOTOR             0
 //#define LEFT_MOTOR              1

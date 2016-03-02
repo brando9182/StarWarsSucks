@@ -2,7 +2,7 @@
 #include <Servo.h>
 
 /*---------------------------Definitions-------------------------------------*/
-#define DEPLOYMENT_SERVO_PIN            2
+#define DEPLOYMENT_SERVO_PIN            2   //confirmed
 #define DEPLOYMENT_MAX_TOKENS           12
 
 /*---------------------------Constants---------------------------------------*/

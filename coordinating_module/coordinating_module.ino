@@ -28,24 +28,28 @@
 void setup() {
   Serial.begin(9600);
 
-//  init_button();
-    init_motors();
-//  init_distance_sensor();
-//  init_ending_timer();
-//  init_light_ring();
-//  init_line_sensor();
-//  init_token_deploy();
-//  init_compass();
-//  init_token_sensors();
+  init_button();
+  init_motors();
+  init_distance_sensor();
+  init_ending_timer();
+  init_light_ring();
+  init_line_sensor();
+  init_token_deploy();
+  init_compass();
+  init_token_sensors();
 
 Serial.println("all components initialized");
 }
 
 void loop() {
-  //Place coordinating state machine here
-  //deployment_home ();
-  delay(1000);
-  //deploy_tokens(1);
- Serial.println("looping");
-   drive_forward(1);vb    
+ //drive_forward(1); 
+ delay(1000);
+ indicator_blanket_set(100, 100, 100, 100);
+ //deployment_home();
+ //delay(1000);
+ //deploy_tokens(5);
+// Serial.println(line_below_sensor(1));
+// indicator_pulse();
+// long_distance_sensor_report(1);
+ 
 }
