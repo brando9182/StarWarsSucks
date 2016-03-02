@@ -20,4 +20,8 @@ void setup() {
 
 void loop() {
   //Place coordinating state machine here
+  //deployment_home ();
+  delay(1000);
+  //deploy_tokens(1);
+  delay(1000);
 }

@@ -1,7 +1,7 @@
 /*-----------------------------Includes--------------------------------------*/
 /*---------------------------Definitions-------------------------------------*/
 #define LONG_DISTANCE_SENSOR_PIN_0  A0
-#define LONG_DISTANCE_SENSOR_PIN_1  A1
+#define LONG_DISTANCE_SENSOR_PIN_1  A1  //back
 #define SHORT_DISTANCE_SENSOR_PIN   A2
 #define LONG_RANGE                  0
 #define SHORT_RANGE                 1
