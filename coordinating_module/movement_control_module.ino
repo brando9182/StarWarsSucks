@@ -3,13 +3,14 @@
 #define MOTOR_DIRECTION_PIN_1   6
 #define MOTOR_ENABLE_PIN_1      5
 #define MOTOR_DIRECTION_PIN_2   4
-#define MOTOR_ENABLE_PIN_2      12
-#define RIGHT_MOTOR             0
-#define LEFT_MOTOR              1
-#define FORWARD                 HIGH
-#define REVERSE                 LOW
-#define CLOCKWISE                0
-#define COUNTERCLOCKWISE        1
+#define MOTOR_ENABLE_PIN_2      3
+//defined in main files
+//#define RIGHT_MOTOR             0
+//#define LEFT_MOTOR              1
+//#define FORWARD                 HIGH
+//#define REVERSE                 LOW
+//#define CLOCKWISE                0
+//#define COUNTERCLOCKWISE        1
 
 /*---------------------------Constants---------------------------------------*/
 static const uint8_t MOTOR_LOWEST_PULSE   = 0;
@@ -132,22 +133,23 @@ void stop_drive_motor (uint8_t motorNumber) {
 }
 
 void set_motor_speed (uint8_t motorNumber, uint8_t volts) {
-  uint8_t pulseLength;
-  if(volts > 255) volts = 255; //saturate
+  if(volts > 12) volts = 12;
+  //convert volts to pwm wave
+  uint8_t pulseLength = map(volts, 0, 12, 0, 255);
   //spinning one direction
   if ((motorNumber == 0) && !digitalRead(MOTOR_DIRECTION_PIN_1)) {
-    analogWrite(MOTOR_ENABLE_PIN_1, volts);
+    analogWrite(MOTOR_ENABLE_PIN_1, pulseLength);
   }
   if ((motorNumber == 1) && !digitalRead(MOTOR_DIRECTION_PIN_2)) {
-    analogWrite(MOTOR_ENABLE_PIN_2, volts);
+    analogWrite(MOTOR_ENABLE_PIN_2, pulseLength);
   }
   
   //spinning the other direction
   if ((motorNumber == 0) && digitalRead(MOTOR_DIRECTION_PIN_1)) {
-    analogWrite(MOTOR_ENABLE_PIN_1, volts);
+    analogWrite(MOTOR_ENABLE_PIN_1, pulseLength);
   }
   if ((motorNumber == 1) && digitalRead(MOTOR_DIRECTION_PIN_2)) {
-    analogWrite(MOTOR_ENABLE_PIN_2, volts);
+    analogWrite(MOTOR_ENABLE_PIN_2, pulseLength);
   }
 }
 

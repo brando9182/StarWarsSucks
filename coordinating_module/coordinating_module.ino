@@ -13,11 +13,17 @@
 #define LINE_SENSOR_PIN_0           A3
 #define LINE_SENSOR_PIN_1           A4
 #define LINE_SENSOR_PIN_2           A5
+
+/*-------------------------Movement definitions------------------------------*/
+#define RIGHT_MOTOR             0
+#define LEFT_MOTOR              1
+#define FORWARD                 HIGH
+#define REVERSE                 LOW
+#define CLOCKWISE                0
+#define COUNTERCLOCKWISE        1
 /*---------------------------Constants---------------------------------------*/
 /*---------------------------Module Variables--------------------------------*/
 /*-----------------------------Public Functions------------------------------*/
-
-//D1 = -.5, E1 = -.25, D2 = -.5, E2 = -.08 mps = .5
 
 void setup() {
   Serial.begin(9600);
@@ -36,9 +42,6 @@ Serial.println("all components initialized");
 }
 
 void loop() {
-  //set_motor_speed (0, 100);
-  //set_motor_speed (1, 100);
-
-  
-  //Place coordinating state machine here
+ Serial.println("looping");
+   drive_forward(1);vb    
 }
