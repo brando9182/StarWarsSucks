@@ -3,7 +3,7 @@
 #include <Adafruit_NeoPixel.h>
 
 /*---------------------------Definitions-------------------------------------*/
-#define INDICATOR_PIN       12
+//#define INDICATOR_PIN       12
 #define INDICATOR_LED_NUM   16
 #define INDICATOR_PULSE     5
 #define TIMER_INDICATOR     0

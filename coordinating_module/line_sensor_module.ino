@@ -1,8 +1,8 @@
 /*-----------------------------Includes--------------------------------------*/
 /*---------------------------Definitions-------------------------------------*/
-#define LINE_SENSOR_PIN_0   A3
-#define LINE_SENSOR_PIN_1   A4
-#define LINE_SENSOR_PIN_2   A5
+//#define LINE_SENSOR_PIN_0   A3
+//#define LINE_SENSOR_PIN_1   A4
+//#define LINE_SENSOR_PIN_2   A5
 #define LINE_SENSOR_THRSHLD 200 //needs to be set
 
 /*---------------------------Constants---------------------------------------*/
