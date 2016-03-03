@@ -1,8 +1,5 @@
 /*-----------------------------Includes--------------------------------------*/
 /*---------------------------Definitions-------------------------------------*/
-#define LONG_DISTANCE_SENSOR_PIN_0  A0
-#define LONG_DISTANCE_SENSOR_PIN_1  A1  //back
-#define SHORT_DISTANCE_SENSOR_PIN   A2
 #define LONG_RANGE                  0
 #define SHORT_RANGE                 1
 
@@ -40,6 +37,7 @@ uint8_t long_distance_sensor_report (uint8_t sensorNumber){
 //Returns distance in centimeters
 uint8_t short_distance_sensor_report (void){
   uint8_t rawValue = analogRead(SHORT_DISTANCE_SENSOR_PIN);
+  Serial.println(rawValue);
   return (analogToCMMapping (SHORT_RANGE, rawValue));
 }
 

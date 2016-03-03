@@ -1,16 +1,11 @@
 /*-----------------------------Includes--------------------------------------*/
 /*---------------------------Definitions-------------------------------------*/
-#define MOTOR_DIRECTION_PIN_1   6
-#define MOTOR_ENABLE_PIN_1      5
-#define MOTOR_DIRECTION_PIN_2   4
-#define MOTOR_ENABLE_PIN_2      3
-//defined in main files
-//#define RIGHT_MOTOR             0
-//#define LEFT_MOTOR              1
-//#define FORWARD                 HIGH
-//#define REVERSE                 LOW
-//#define CLOCKWISE                0
-//#define COUNTERCLOCKWISE        1
+#define RIGHT_MOTOR             0
+#define LEFT_MOTOR              1
+#define FORWARD                 HIGH
+#define REVERSE                 LOW
+#define CLOCKWISE               0
+#define COUNTERCLOCKWISE        1
 
 /*---------------------------Constants---------------------------------------*/
 static const uint8_t MOTOR_LOWEST_PULSE   = 0;
