@@ -22,3 +22,4 @@ bool competition_ended (void) {
   if (TMRArd_IsTimerExpired(TIMER_TIMEOUT)) return true;
   return false;
 }
+

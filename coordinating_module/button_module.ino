@@ -22,12 +22,14 @@ void update_button (void) {
     button_actively_debouncing = true;
   }
   if (TMRArd_IsTimerExpired(TIMER_DEBOUNCE)) {
-    button_state_reported = digitalRead(BUTTON_PIN);
+    button_state_reported = !digitalRead(BUTTON_PIN);
     button_actively_debouncing = false;
   }
 }
 
+//added update button here for a simpler interface
 uint8_t button_state_report (void) {
+  update_button();
   return button_state_reported;
 }
 

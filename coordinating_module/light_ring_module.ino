@@ -8,6 +8,11 @@
 #define INDICATOR_PULSE     5
 #define TIMER_INDICATOR     0
 
+//#define RIGHT_LED           0
+//#define BACK_LED            3
+//#define LEFT_LED            7
+//#define FRONT_LED          11
+
 /*---------------------------Constants---------------------------------------*/
 /*---------------------------Module Variables--------------------------------*/
 uint8_t indicator_pulse_dir = 0;
@@ -19,6 +24,12 @@ Adafruit_NeoPixel pixels = Adafruit_NeoPixel(INDICATOR_LED_NUM, INDICATOR_PIN, N
 void init_light_ring (void) {
   pixels.begin();
   TMRArd_InitTimer(TIMER_INDICATOR, INDICATOR_PULSE);
+}
+
+//CONFIRMED WORKING (3/3), NHS
+void indicator_LED_on(uint8_t LED_num){
+  pixels.setPixelColor(LED_num, pixels.Color(0,0,0,100));
+  pixels.show();
 }
 
 //CONFIRMED WORKING (3/3), NHS

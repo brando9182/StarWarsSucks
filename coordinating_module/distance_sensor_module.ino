@@ -1,7 +1,10 @@
 /*-----------------------------Includes--------------------------------------*/
 /*---------------------------Definitions-------------------------------------*/
 #define LONG_RANGE                  0
-#define SHORT_RANGE                 1
+#define SHORT_RANGE                  1
+//#define LONG_RANGE_BACK             0
+//#define LONG_RANGE_FRONT            1
+//#define SHORT_RANGE                 2
 
 /*---------------------------Constants---------------------------------------*/
 static uint8_t SHORT_DISTANCE_MAP_MAX_INDEX = 75;
@@ -29,8 +32,8 @@ void init_distance_sensor (void){
 //Returns distance in centimeters; sensor number parameter is 0 indexed
 uint8_t long_distance_sensor_report (uint8_t sensorNumber){
   uint8_t rawValue;
-  if (sensorNumber == 0) rawValue = analogRead(LONG_DISTANCE_SENSOR_PIN_0);
-  if (sensorNumber == 1) rawValue = analogRead(LONG_DISTANCE_SENSOR_PIN_1);
+  if (sensorNumber == LONG_RANGE_BACK) rawValue = analogRead(LONG_DISTANCE_SENSOR_PIN_0);
+  if (sensorNumber == LONG_RANGE_FRONT) rawValue = analogRead(LONG_DISTANCE_SENSOR_PIN_1);
   return (analogToCMMapping (LONG_RANGE, rawValue));
 }
 

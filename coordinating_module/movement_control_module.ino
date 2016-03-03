@@ -1,11 +1,25 @@
 /*-----------------------------Includes--------------------------------------*/
 /*---------------------------Definitions-------------------------------------*/
+<<<<<<< HEAD
 #define RIGHT_MOTOR             0
 #define LEFT_MOTOR              1
 #define FORWARD                 HIGH
 #define REVERSE                 LOW
 #define CLOCKWISE               0
 #define COUNTERCLOCKWISE        1
+=======
+#define MOTOR_DIRECTION_PIN_1   6
+#define MOTOR_ENABLE_PIN_1      5
+#define MOTOR_DIRECTION_PIN_2   12 //originally pin 4
+#define MOTOR_ENABLE_PIN_2      3 //originally pin 12
+//defined in main files
+//#define RIGHT_MOTOR             0
+//#define LEFT_MOTOR              1
+//#define FORWARD                 HIGH
+//#define REVERSE                 LOW
+//#define CLOCKWISE                0
+//#define COUNTERCLOCKWISE        1
+>>>>>>> 60945c5dcbe2dbbba505ac1a96c7f132b9a24c9e
 
 /*---------------------------Constants---------------------------------------*/
 static const uint8_t MOTOR_LOWEST_PULSE   = 0;
@@ -39,6 +53,7 @@ void init_motors (void) {
   }
 }
 /////////////////"Nicer Functions"//////////////////////////////
+//min = .3 mps
 void drive_forward(float mps){
   uint8_t volts = mps * MPS_TO_VOLTAGE;
   

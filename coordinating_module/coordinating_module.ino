@@ -1,6 +1,5 @@
 /*-----------------------------Includes--------------------------------------*/
 /*---------------------------PIN Definitions-------------------------------------*/
-//None of these may be correct
 #define DEPLOYMENT_SERVO_PIN        2   //CONFIRMED (3/3), NHS
 #define MOTOR_ENABLE_PIN_2          3
 #define MOTOR_DIRECTION_PIN_2       4
@@ -29,35 +28,40 @@ void setup() {
 
 //  init_button();
 //  init_compass();
-//  init_distance_sensor();
-//  init_ending_timer();
+  init_distance_sensor();
 //  init_ending_timer();
   init_light_ring();
 //  init_line_sensor();
 //  init_motors();
   init_token_deploy();
   init_token_sensors();
+//  init_token_sensors();
 }
 
+uint8_t set_up_done = 1;
+uint8_t facing_walls = 0;
 void loop() {
-  deployment_home ();
-//  delay(500);
-//  deploy_tokens(1);
-////  Serial.println(deployment_tokens_remaining());
-//  delay(500);
+  set_up_done = start_up(set_up_done);
+  drive_forward(.3);
+  if(button_state_report()){
+    off_state();
+    delay(1000);
+  }
+  delay(100);
+ //deployment_home();
+ //delay(1000);
+ //deploy_tokens(5);
+// indicator_pulse();
+// long_distance_sensor_report(1);
+ 
+}
 
-//indicator_pulse();
-//indicator_blanket_set(10,10,10,0);
-//delay(500);
-//indicator_clear();
-//delay(1000);
+void off_state(){
+  //turn motors, lights etc off
+  drive_forward(0);
+  delay(1000); //block for one second
+  while(button_state_report() == 0){};
+  return;
+}
 
-  //Serial.println(token_in_slot(1));
-  delay(10);
-
-  //short_distance_sensor_report();
-  //line_below_sensor(1);
-  drive_forward(1);
-//  delay(10);
-  
- }
+>>>>>>> 60945c5dcbe2dbbba505ac1a96c7f132b9a24c9e
