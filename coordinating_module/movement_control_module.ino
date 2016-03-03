@@ -44,6 +44,7 @@ void init_motors (void) {
   }
 }
 /////////////////"Nicer Functions"//////////////////////////////
+//min = .3 mps
 void drive_forward(float mps){
   uint8_t volts = mps * MPS_TO_VOLTAGE;
   

@@ -8,6 +8,11 @@
 #define INDICATOR_PULSE     5
 #define TIMER_INDICATOR     0
 
+//#define RIGHT_LED           0
+//#define BACK_LED            3
+//#define LEFT_LED            7
+//#define FRONT_LED          11
+
 /*---------------------------Constants---------------------------------------*/
 /*---------------------------Module Variables--------------------------------*/
 uint8_t indicator_pulse_dir = 0;
@@ -20,6 +25,10 @@ void init_light_ring (void) {
   TMRArd_InitTimer(TIMER_INDICATOR, INDICATOR_PULSE);
 }
 
+void indicator_LED_on(uint8_t LED_num){
+  pixels.setPixelColor(LED_num, pixels.Color(0,0,0,100));
+  pixels.show();
+}
 void indicator_blanket_set (uint8_t r, uint8_t g, uint8_t b, uint8_t w) {
   for (int i = 0; i < INDICATOR_LED_NUM; i++) {
     pixels.setPixelColor(i, pixels.Color(r,g,b,w));

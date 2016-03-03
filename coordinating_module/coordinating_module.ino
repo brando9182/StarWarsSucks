@@ -26,6 +26,12 @@
 #define LONG_RANGE_BACK             0
 #define LONG_RANGE_FRONT            1
 #define SHORT_RANGE_RIGHT           2
+
+/*-------------------------Light Ring definitions-----------------------*/
+#define RIGHT_LED                   0
+#define BACK_LED                    3
+#define LEFT_LED                    6
+#define FRONT_LED                   9
 /*---------------------------Constants---------------------------------------*/
 /*---------------------------Module Variables--------------------------------*/
 /*-----------------------------Public Functions------------------------------*/
@@ -34,7 +40,7 @@ void setup() {
   Serial.begin(9600);
 
 //  init_button();
-//  init_motors();
+  init_motors();
   init_distance_sensor();
 //  init_ending_timer();
 //  init_light_ring();
@@ -42,61 +48,20 @@ void setup() {
 //  //init_token_deploy();
 //  init_compass();
 //  init_token_sensors();
-indicator_clear();
-
-Serial.println("all components initialized");
 }
+//no startup sequence for now
+uint8_t set_up_done = 1;
 
-int incomingByte = 0;   // for incoming serial data
-int data0 = 0;
-int data1 = 1;
-int data2 = 2;
 uint8_t facing_walls = 0;
 void loop() {
-          // send data only when you receive data:
-        if (Serial.available() > 0) {
-                // say what you got:
-                incomingByte = Serial.parseInt();
-                Serial.println(incomingByte);
-                
-        }
-  if(incomingByte == 0){
-      Serial.print("Right sensor: ");
-      data0 = analogRead(SHORT_DISTANCE_SENSOR_PIN);
-      data1 = analogRead(SHORT_DISTANCE_SENSOR_PIN);
-      data2 = analogRead(SHORT_DISTANCE_SENSOR_PIN);
-      Serial.println((data0 + data1 + data2)/3);
-
-  } else if (incomingByte == 1){
-      Serial.print("back sensor: ");
-      data0 = analogRead(LONG_DISTANCE_SENSOR_PIN_1);
-      data1 = analogRead(LONG_DISTANCE_SENSOR_PIN_1);
-      data2 = analogRead(LONG_DISTANCE_SENSOR_PIN_1);
-      Serial.println((data0 + data1 + data2)/3);
-  } else if (incomingByte == 2){
-      Serial.print("Front sensor: ");
-      data0 = analogRead(LONG_DISTANCE_SENSOR_PIN_0);
-      data1 = analogRead(LONG_DISTANCE_SENSOR_PIN_0);
-      data2 = analogRead(LONG_DISTANCE_SENSOR_PIN_0);
-      Serial.println((data0 + data1 + data2)/3);
+  set_up_done = start_up(set_up_done);
+  drive_forward(.3);
+  if(button_state_report()){
+    off_state();
+    delay(1000);
   }
 
-  //spin
-  if(analogRead(LONG_DISTANCE_SENSOR_PIN_0) > 300){
-    facing_walls = 1;
-    indicator_clear();
-  }
-  if(analogRead(LONG_DISTANCE_SENSOR_PIN_0) < 200 && facing_walls){
-    indicator_blanket_set(255,0,0,0);
-    if(analogRead(LONG_DISTANCE_SENSOR_PIN_1) > 600){
-          indicator_blanket_set(0,255,0,0);
-    }
-    else if(analogRead(LONG_DISTANCE_SENSOR_PIN_1) < 600){
-          indicator_blanket_set(0,0,255,0);
-    }
-  }
-  Serial.println(facing_walls);
-  
+        
   delay(100);
  //deployment_home();
  //delay(1000);
@@ -105,3 +70,12 @@ void loop() {
 // long_distance_sensor_report(1);
  
 }
+
+void off_state(){
+  //turn motors, lights etc off
+  drive_forward(0);
+  delay(1000); //block for one second
+  while(button_state_report() == 0){};
+  return;
+}
+
