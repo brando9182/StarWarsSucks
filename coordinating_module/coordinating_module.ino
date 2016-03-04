@@ -28,12 +28,12 @@
 #define PIVOT_PULSE             340
 
 #define TIMER_OFFSET_PIVOT      15
-#define OFFSET_PIVOT_PULSE      500
+#define OFFSET_PIVOT_PULSE      900
 
 #define TIMER_BACKUP            14
 #define BACKUP_PULSE            100
 
-#define DEFAULT_SPEED           50
+#define DEFAULT_SPEED           59
 
 #define SIDE_BIN_DISTANCE       18
 #define FRONT_ORIENT_DISTANCE   120
@@ -61,6 +61,12 @@ static void T5_6 (void);
 static void T6_6 (void);
 static void T6_1 (void);
 static void T6_7 (void);
+static void T7_7 (void);
+static void T7_1 (void);
+static void T7_12 (void);
+static void T12_1 (void);
+static void T12_7 (void);
+
 static void lineFollow (void);
 static bool orientedCorrectly (void);
 static bool binTrigger (void);
@@ -77,6 +83,7 @@ static const uint8_t STATE_6  = 5;
 static const uint8_t STATE_7  = 6;
 static const uint8_t STATE_8  = 7;
 static const uint8_t STATE_9  = 8;
+static const uint8_t STATE_12 = 12;
 
 /*---------------------------Module Variables--------------------------------*/
 uint8_t state;
@@ -155,7 +162,6 @@ void loop() {
     break;
     case (STATE_9):
       if (line_under_rear()) {
-        haltCode();
         T9_4 ();
       } else if (buttonEvent() | competition_ended()) {
         T9_1 ();
@@ -188,6 +194,22 @@ void loop() {
         T6_1 ();
       } else {
         T6_6 ();
+      }
+    break;
+    case (STATE_7): //line follows
+      if (binTrigger()) {
+        T7_12 ();
+      } else if (buttonEvent() | competition_ended()) {
+        T7_1 ();
+      } else {
+        T7_7 ();
+      }
+    break;
+    case (STATE_12): //line follows
+      if (buttonEvent() | competition_ended()) {
+        T12_1 ();
+      } else {
+        T12_7 ();
       }
     break;
     default:
@@ -261,7 +283,7 @@ static void T8_8 (void) {
 }
 
 static void T9_9 (void) {
-  drive (DEFAULT_SPEED-10, 0);
+  drive (DEFAULT_SPEED-15, 0);
   state = STATE_9;
 }
 
@@ -285,7 +307,7 @@ static void T4_1 (void) {
 }
 
 static void T4_4 (void) {
-  drive (DEFAULT_SPEED-10, -(DEFAULT_SPEED-10));
+  drive (DEFAULT_SPEED-15, -(DEFAULT_SPEED-15));
   state = STATE_4;
 }
 
@@ -302,7 +324,7 @@ static void T5_1 (void) {
 }
 
 static void T5_5 (void) {
-  drive (-(DEFAULT_SPEED-10), -(DEFAULT_SPEED-10));
+  drive (-(DEFAULT_SPEED-14), -(DEFAULT_SPEED-14));
   state = STATE_5;
 }
 
@@ -319,13 +341,45 @@ static void T6_1 (void) {
 }
 
 static void T6_6 (void) {
-  drive (-(DEFAULT_SPEED-10), DEFAULT_SPEED-10);
+  drive (-(DEFAULT_SPEED-16), DEFAULT_SPEED-16);
   state = STATE_6;
 }
 
 static void T6_7 (void) {
-  //finish me
-  haltCode();
+  stop_motors ();
+  state = STATE_7;
+}
+
+static void T7_1 (void) {
+  stop_motors ();
+  deployment_home ();
+  state = STATE_1;
+}
+
+static void T7_7 (void) {
+  if (!line_under_rear()) {
+    drive (-(DEFAULT_SPEED-20),0);
+  } else if (!line_under_rear() & !line_under_right()) {
+    drive (-(DEFAULT_SPEED-25),0);
+  } else {
+    drive (-(DEFAULT_SPEED-7), -(DEFAULT_SPEED-4));
+  }
+  state = STATE_7;
+}
+
+static void T7_12 (void) {
+  stop_motors();
+  state = STATE_12;
+}
+
+static void T12_1 (void) {
+  stop_motors ();
+  deployment_home ();
+  state = STATE_1;
+}
+
+static void T12_7 (void) {
+  deploy_tokens
   state = STATE_7;
 }
 

@@ -10,7 +10,7 @@ static const char REVERSE                 = 1;
 static const char RIGHT_MOTOR             = 0;
 static const char LEFT_MOTOR              = 1;
 static const uint8_t MAX_PULSE            = 255;
-static const uint8_t MOTOR_OFFSET         = 12; //TODO: measure PWM offset
+static const uint8_t MOTOR_OFFSET         = 10;
 
 /*---------------------------Module Variables--------------------------------*/
 /*-----------------------------Public Functions------------------------------*/
