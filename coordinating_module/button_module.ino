@@ -1,3 +1,4 @@
+//MODULE IS FULLY FUNCTIONING/DEBUGGED (3/3), NHS
 /*-----------------------------Includes--------------------------------------*/
 #include <Timers.h>
 
@@ -11,12 +12,21 @@ uint8_t button_state_reported = 0;
 bool button_actively_debouncing = false;
 
 /*-----------------------------Public Functions------------------------------*/
+//CONFIRMED WORKING (3/3), NHS
 void init_button (void){
   pinMode(BUTTON_PIN, INPUT);
   TMRArd_SetTimer(TIMER_DEBOUNCE, DEBOUNCE_LENGTH);
 }
 
-void update_button (void) {
+//CONFIRMED WORKING (3/3), NHS
+uint8_t button_state_report (void) {
+  updateButton();
+  return button_state_reported;
+}
+
+/*-----------------------------Helper Functions------------------------------*/
+//CONFIRMED WORKING (3/3), NHS
+static void updateButton (void) {
   if ((button_state_reported != digitalRead(BUTTON_PIN)) & !button_actively_debouncing) {
     TMRArd_InitTimer(TIMER_DEBOUNCE, DEBOUNCE_LENGTH);
     button_actively_debouncing = true;
@@ -26,11 +36,3 @@ void update_button (void) {
     button_actively_debouncing = false;
   }
 }
-
-//added update button here for a simpler interface
-uint8_t button_state_report (void) {
-  update_button();
-  return button_state_reported;
-}
-
-

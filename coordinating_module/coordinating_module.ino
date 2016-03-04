@@ -1,10 +1,10 @@
 /*-----------------------------Includes--------------------------------------*/
 /*---------------------------PIN Definitions-------------------------------------*/
 #define DEPLOYMENT_SERVO_PIN        2   //CONFIRMED (3/3), NHS
-#define MOTOR_ENABLE_PIN_2          3
-#define MOTOR_DIRECTION_PIN_2       4
-#define MOTOR_ENABLE_PIN_1          5
-#define MOTOR_DIRECTION_PIN_1       6
+#define MOTOR_ENABLE_RIGHT          3
+#define MOTOR_DIRECTION_RIGHT       12
+#define MOTOR_ENABLE_LEFT           5
+#define MOTOR_DIRECTION_LEFT        6
 #define TOKEN_SENSOR_PIN_0          7   //CONFIRMED (3/3), NHS
 #define TOKEN_SENSOR_PIN_1          9   //CONFIRMED (3/3), NHS
 #define TOKEN_SENSOR_PIN_2          8   //CONFIRMED (3/3), NHS
@@ -25,43 +25,21 @@
 
 void setup() {
   Serial.begin(9600);
-
-//  init_button();
-//  init_compass();
+  init_ending_timer();
+  init_button();
   init_distance_sensor();
-//  init_ending_timer();
+  init_ending_timer();
   init_light_ring();
-//  init_line_sensor();
-//  init_motors();
+  init_line_sensor();
+  init_motors();
   init_token_deploy();
   init_token_sensors();
-//  init_token_sensors();
+  deployment_home();
+  start_ending_timer();
+  indicator_clear();
+  //init_compass();
 }
 
-uint8_t set_up_done = 1;
-uint8_t facing_walls = 0;
 void loop() {
-  set_up_done = start_up(set_up_done);
-  drive_forward(.3);
-  if(button_state_report()){
-    off_state();
-    delay(1000);
-  }
-  delay(100);
- //deployment_home();
- //delay(1000);
- //deploy_tokens(5);
-// indicator_pulse();
-// long_distance_sensor_report(1);
- 
+  drive(-100, 0);
 }
-
-void off_state(){
-  //turn motors, lights etc off
-  drive_forward(0);
-  delay(1000); //block for one second
-  while(button_state_report() == 0){};
-  return;
-}
-
->>>>>>> 60945c5dcbe2dbbba505ac1a96c7f132b9a24c9e

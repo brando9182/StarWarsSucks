@@ -1,11 +1,17 @@
+//MODULE IS FULLY FUNCTIONING/DEBUGGED (3/3), NHS
 /*-----------------------------Includes--------------------------------------*/
 /*---------------------------Definitions-------------------------------------*/
 #define TOKEN_SENSOR_NUM      4
 
 /*---------------------------Constants---------------------------------------*/
 /*---------------------------Module Variables--------------------------------*/
-uint8_t token_curr_num = 1;
-uint8_t token_order [TOKEN_SENSOR_NUM];
+bool binA;
+bool binB;
+bool binC;
+bool binD;
+bool binE;
+bool homed;
+uint8_t previous_insertion;
 
 /*-----------------------------Public Functions------------------------------*/
 //CONFIRMED WORKING (3/3), NHS
@@ -17,6 +23,7 @@ void init_token_sensors (void) {
 }
 
 //CONFIRMED WORKING (3/3), NHS
+//1 indexed
 bool token_in_slot (uint8_t sensor_number) {
   if ((sensor_number == 1) & !digitalRead(TOKEN_SENSOR_PIN_0)) return true;
   if ((sensor_number == 2) & !digitalRead(TOKEN_SENSOR_PIN_1)) return true;
@@ -25,25 +32,38 @@ bool token_in_slot (uint8_t sensor_number) {
   return false;
 }
 
-//uint8_t* token_report (void) {
-//  return &token_order;
-//}
-
-//Call once all of the tokens have been deployed to reset the token insertion order count
+//CONFIRMED WORKING (3/3), NHS
 void token_read_reset (void) {
-  for (int i = 0; i < TOKEN_SENSOR_NUM; i++) {
-    token_order [i] = 0;
+  binA = false;
+  binB = false;
+  binC = false;
+  binD = false;
+  binE = false;
+  homed = false;
+  previous_insertion = 0;
+}
+
+//CONFIRMED WORKING (3/3), NHS
+void bin_order_update (void) {
+  uint8_t current_insertion = tokenRead();
+  if (!homed) {
+    uint8_t delta = previous_insertion ^ current_insertion;
+    if (delta == (1 << 0)) binA = true;
+    if (delta == (1 << 1)) binB = true;
+    if (delta == (1 << 2)) binC = true;
+//    if (delta == (1 << 3)) binD = true;
+//    if (delta == (1 << 4)) binE = true;
+    if (delta == (1 << 3)) homed = true;
   }
 }
 
-//Records and updates an array containing the insertion order of the information chips
-void token_read_update (void) {
-  for (int i = 0; i < TOKEN_SENSOR_NUM; i++) {
-    if ((token_in_slot(i)) && (token_order[i] != 0))
-    {
-      token_order[i] = token_curr_num;
-      token_curr_num++;
-    }
+/*-----------------------------Helper Functions------------------------------*/
+//CONFIRMED WORKING (3/3), NHS
+static uint8_t tokenRead (void) {
+  uint8_t tokenStatus = 0;
+  for (int i = 1; i <= TOKEN_SENSOR_NUM; i++) {
+    tokenStatus |= token_in_slot(i) << (i-1);
   }
+  return tokenStatus;
 }
 
