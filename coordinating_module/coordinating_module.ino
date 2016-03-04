@@ -41,5 +41,5 @@ void setup() {
 }
 
 void loop() {
-  drive(-100, 0);
+  Serial.println(front_distance_sensor());
 }

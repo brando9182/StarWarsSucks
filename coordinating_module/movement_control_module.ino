@@ -27,6 +27,7 @@ void init_motors (void) {
 }
 
 //CONFIRMED WORKING (3/3), NHS
+//Controls motor speeds and direction with full forward speed being `100` and full negative being `-100`
 void drive (int8_t leftMotorSpeed, int8_t rightMotorSpeed) {
   if (leftMotorSpeed < 0) set_motor_direction(LEFT_MOTOR, REVERSE);
   if (leftMotorSpeed > 0) set_motor_direction(LEFT_MOTOR, FORWARD);

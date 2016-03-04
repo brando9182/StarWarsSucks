@@ -23,16 +23,6 @@ void init_token_sensors (void) {
 }
 
 //CONFIRMED WORKING (3/3), NHS
-//1 indexed
-bool token_in_slot (uint8_t sensor_number) {
-  if ((sensor_number == 1) & !digitalRead(TOKEN_SENSOR_PIN_0)) return true;
-  if ((sensor_number == 2) & !digitalRead(TOKEN_SENSOR_PIN_1)) return true;
-  if ((sensor_number == 3) & !digitalRead(TOKEN_SENSOR_PIN_2)) return true;
-  if ((sensor_number == 4) & !digitalRead(TOKEN_SENSOR_PIN_3)) return true;
-  return false;
-}
-
-//CONFIRMED WORKING (3/3), NHS
 void token_read_reset (void) {
   binA = false;
   binB = false;
@@ -62,8 +52,18 @@ void bin_order_update (void) {
 static uint8_t tokenRead (void) {
   uint8_t tokenStatus = 0;
   for (int i = 1; i <= TOKEN_SENSOR_NUM; i++) {
-    tokenStatus |= token_in_slot(i) << (i-1);
+    tokenStatus |= tokenInSlot(i) << (i-1);
   }
   return tokenStatus;
+}
+
+//CONFIRMED WORKING (3/3), NHS
+//1 indexed
+static bool tokenInSlot (uint8_t sensor_number) {
+  if ((sensor_number == 1) & !digitalRead(TOKEN_SENSOR_PIN_0)) return true;
+  if ((sensor_number == 2) & !digitalRead(TOKEN_SENSOR_PIN_1)) return true;
+  if ((sensor_number == 3) & !digitalRead(TOKEN_SENSOR_PIN_2)) return true;
+  if ((sensor_number == 4) & !digitalRead(TOKEN_SENSOR_PIN_3)) return true;
+  return false;
 }
 

@@ -31,17 +31,22 @@ void init_distance_sensor (void){
 }
 
 //CONFIRMED WORKING (3/3), NHS
-//Returns distance in centimeters; sensor number parameter is 0 indexed
-uint8_t long_distance_sensor_report (uint8_t sensorNumber){
-  uint16_t rawValue;
-  if (sensorNumber == LONG_RANGE_BACK) rawValue = analogRead(LONG_DISTANCE_SENSOR_PIN_0);
-  if (sensorNumber == LONG_RANGE_FRONT) rawValue = analogRead(LONG_DISTANCE_SENSOR_PIN_1);
+//Returns distance in centimeters
+uint8_t front_distance_sensor (void){
+  uint16_t rawValue = analogRead(LONG_DISTANCE_SENSOR_PIN_0);
   return (analogToCMMapping (LONG_RANGE, rawValue));
 }
 
 //CONFIRMED WORKING (3/3), NHS
 //Returns distance in centimeters
-uint8_t short_distance_sensor_report (void){
+uint8_t back_distance_sensor (void){
+  uint16_t rawValue = analogRead(LONG_DISTANCE_SENSOR_PIN_1);
+  return (analogToCMMapping (LONG_RANGE, rawValue));
+}
+
+//CONFIRMED WORKING (3/3), NHS
+//Returns distance in centimeters
+uint8_t side_distance_sensor (void){
   uint16_t rawValue = analogRead(SHORT_DISTANCE_SENSOR_PIN);
   return (analogToCMMapping (SHORT_RANGE, rawValue));
 }
