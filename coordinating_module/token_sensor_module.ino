@@ -5,13 +5,13 @@
 
 /*---------------------------Constants---------------------------------------*/
 /*---------------------------Module Variables--------------------------------*/
-bool binA;
-bool binB;
-bool binC;
-bool binD;
-bool binE;
-bool homed;
-uint8_t previous_insertion;
+static bool binA;
+static bool binB;
+static bool binC;
+static bool binD;
+static bool binE;
+static bool homed;
+static uint8_t previous_insertion;
 
 /*-----------------------------Public Functions------------------------------*/
 //CONFIRMED WORKING (3/3), NHS

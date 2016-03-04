@@ -10,7 +10,7 @@ static const char REVERSE                 = 1;
 static const char RIGHT_MOTOR             = 0;
 static const char LEFT_MOTOR              = 1;
 static const uint8_t MAX_PULSE            = 255;
-static const uint8_t MOTOR_OFFSET         = 0; //TODO: measure PWM offset
+static const uint8_t MOTOR_OFFSET         = 12; //TODO: measure PWM offset
 
 /*---------------------------Module Variables--------------------------------*/
 /*-----------------------------Public Functions------------------------------*/
@@ -41,7 +41,7 @@ void drive (int8_t leftMotorSpeed, int8_t rightMotorSpeed) {
 //CONFIRMED WORKING (3/3), NHS
 void stop_motors (void) {
   set_motor_speed (RIGHT_MOTOR, 0);
-  set_motor_speed (RIGHT_MOTOR, 0);
+  set_motor_speed (LEFT_MOTOR, 0);
 }
 
 /*-----------------------------Helper Functions------------------------------*/

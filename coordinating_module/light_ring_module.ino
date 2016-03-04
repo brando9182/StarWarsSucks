@@ -8,15 +8,10 @@
 #define INDICATOR_PULSE     5
 #define TIMER_INDICATOR     0
 
-//#define RIGHT_LED           0
-//#define BACK_LED            3
-//#define LEFT_LED            7
-//#define FRONT_LED          11
-
 /*---------------------------Constants---------------------------------------*/
 /*---------------------------Module Variables--------------------------------*/
-uint8_t indicator_pulse_dir = 0;
-uint8_t indicator_pulse_curr = 10;
+static uint8_t indicator_pulse_dir = 0;
+static uint8_t indicator_pulse_curr = 10;
 Adafruit_NeoPixel pixels = Adafruit_NeoPixel(INDICATOR_LED_NUM, INDICATOR_PIN, NEO_GRBW + NEO_KHZ800);
 
 /*-----------------------------Public Functions------------------------------*/
@@ -28,7 +23,7 @@ void init_light_ring (void) {
 
 //CONFIRMED WORKING (3/3), NHS
 void indicator_LED_on(uint8_t LED_num){
-  pixels.setPixelColor(LED_num, pixels.Color(0,0,0,100));
+  pixels.setPixelColor(LED_num, pixels.Color(0,0,0,50));
   pixels.show();
 }
 
@@ -46,7 +41,7 @@ void indicator_pulse (void) {
     if (indicator_pulse_curr >= 250) {
       indicator_pulse_dir = 1;
     }
-    if (indicator_pulse_curr <= 14) {
+    if (indicator_pulse_curr <= 4) {
       indicator_pulse_dir = 0;
     }
     if (indicator_pulse_dir) {

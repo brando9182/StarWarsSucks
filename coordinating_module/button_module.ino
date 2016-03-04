@@ -8,8 +8,8 @@
 
 /*---------------------------Constants---------------------------------------*/
 /*---------------------------Module Variables--------------------------------*/
-uint8_t button_state_reported = 0;
-bool button_actively_debouncing = false;
+static uint8_t button_state_reported = 0;
+static bool button_actively_debouncing = false;
 
 /*-----------------------------Public Functions------------------------------*/
 //CONFIRMED WORKING (3/3), NHS
@@ -19,7 +19,7 @@ void init_button (void){
 }
 
 //CONFIRMED WORKING (3/3), NHS
-uint8_t button_state_report (void) {
+uint8_t button_state (void) {
   updateButton();
   return button_state_reported;
 }

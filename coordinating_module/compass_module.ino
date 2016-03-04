@@ -1,6 +1,7 @@
 //NOT WORKING YET, DEVELOPMENT PUT ON HOLD
 /*-----------------------------Includes--------------------------------------*/
 #include <Wire.h>
+
 /*---------------------------Definitions-------------------------------------*/
 //Requires pins 2 and 3
 #define COMPASS_ADDRESS 0x1E
