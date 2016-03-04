@@ -33,7 +33,7 @@
 #define TIMER_BACKUP            14
 #define BACKUP_PULSE            100
 
-#define DEFAULT_SPEED           59
+#define DEFAULT_SPEED           61
 
 #define SIDE_BIN_DISTANCE       18
 #define FRONT_ORIENT_DISTANCE   120
@@ -358,11 +358,9 @@ static void T7_1 (void) {
 
 static void T7_7 (void) {
   if (!line_under_rear()) {
-    drive (-(DEFAULT_SPEED-20),0);
-  } else if (!line_under_rear() & !line_under_right()) {
-    drive (-(DEFAULT_SPEED-25),0);
+    drive (-(DEFAULT_SPEED-22),0);
   } else {
-    drive (-(DEFAULT_SPEED-7), -(DEFAULT_SPEED-4));
+    drive (-(DEFAULT_SPEED), -(DEFAULT_SPEED+9));
   }
   state = STATE_7;
 }
@@ -379,7 +377,7 @@ static void T12_1 (void) {
 }
 
 static void T12_7 (void) {
-  deploy_tokens
+  deploy_tokens;
   state = STATE_7;
 }
 
