@@ -6,7 +6,8 @@
 #define DEPLOYMENT_MAX_TOKENS       12
 
 /*---------------------------Constants---------------------------------------*/
-static const uint8_t slots[DEPLOYMENT_MAX_TOKENS+1] = {88, 81, 73, 65, 58, 51, 44, 36, 29, 21, 14, 7, 0};
+//not zero indexed
+static uint8_t slots[DEPLOYMENT_MAX_TOKENS+1] = {120, 114, 106, 98, 91, 85, 78, 70, 64, 21, 14, 7, 0};
 static Servo deployment_servo;
 
 /*---------------------------Module Variables--------------------------------*/
