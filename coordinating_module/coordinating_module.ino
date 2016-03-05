@@ -22,7 +22,7 @@
 
 /*--------------------------------Definitions----------------------------------*/
 #define TIMER_DEPLOY            9
-#define DEPLOY_PULSE            500
+#define DEPLOY_PULSE            700
 
 #define TIMER_PIVOT             10
 #define PIVOT_PULSE             340
@@ -33,11 +33,11 @@
 #define TIMER_BACKUP            14
 #define BACKUP_PULSE            100
 
-#define DEFAULT_SPEED           61
+#define DEFAULT_SPEED           58
 
 #define SIDE_BIN_DISTANCE       18
 #define FRONT_ORIENT_DISTANCE   120
-#define SIDE_BIN_DISTANCE       12
+#define SIDE_BIN_DISTANCE       15
 
 /*---------------------------Function prototypes-------------------------------*/
 static void T1_1 (void);
@@ -108,6 +108,7 @@ void setup() {
   start_ending_timer();
   indicator_clear();
   //init_compass();
+  deployment_home();
 }
 
 void loop() {
@@ -197,21 +198,19 @@ void loop() {
       }
     break;
     case (STATE_7): //line follows
-      if (binTrigger()) {
-        T7_12 ();
-      } else if (buttonEvent() | competition_ended()) {
+      if (buttonEvent() | competition_ended()) {
         T7_1 ();
       } else {
         T7_7 ();
       }
     break;
-    case (STATE_12): //line follows
-      if (buttonEvent() | competition_ended()) {
-        T12_1 ();
-      } else {
-        T12_7 ();
-      }
-    break;
+//    case (STATE_12): //line follows
+//      if (buttonEvent() | competition_ended()) {
+//        T12_1 ();
+//      } else {
+//        T12_7 ();
+//      }
+//    break;
     default:
       state = STATE_1;
     break;
@@ -358,15 +357,17 @@ static void T7_1 (void) {
 
 static void T7_7 (void) {
   if (!line_under_rear()) {
-    drive (-(DEFAULT_SPEED-22),0);
+    drive (-(DEFAULT_SPEED-19),0);
   } else {
-    drive (-(DEFAULT_SPEED), -(DEFAULT_SPEED+9));
+    drive (-(DEFAULT_SPEED), -(DEFAULT_SPEED+15));
   }
+  binTrigger();
   state = STATE_7;
 }
 
 static void T7_12 (void) {
   stop_motors();
+  indicator_blanket_set(0, 10, 10, 255);
   state = STATE_12;
 }
 
@@ -377,7 +378,7 @@ static void T12_1 (void) {
 }
 
 static void T12_7 (void) {
-  deploy_tokens;
+  deploy_tokens(1);
   state = STATE_7;
 }
 
@@ -393,8 +394,10 @@ static bool orientedCorrectly (void) {
 
 static bool binTrigger (void) {
   uint8_t side_current = side_distance_sensor();
-  if ((side_current > SIDE_BIN_DISTANCE) && (side_previous < SIDE_BIN_DISTANCE)) {
+  if ((side_current > SIDE_BIN_DISTANCE) && (side_previous < SIDE_BIN_DISTANCE) && TMRArd_IsTimerExpired(TIMER_DEPLOY)) {
     side_previous = side_current;
+    TMRArd_InitTimer(TIMER_DEPLOY, DEPLOY_PULSE);
+    deploy_tokens(1);
     return true;
   }
   side_previous = side_current;
