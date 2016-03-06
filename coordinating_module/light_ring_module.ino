@@ -23,7 +23,7 @@ void init_light_ring (void) {
 
 //CONFIRMED WORKING (3/3), NHS
 void indicator_LED_on(uint8_t LED_num){
-  pixels.setPixelColor(LED_num, pixels.Color(0,0,0,50));
+  pixels.setPixelColor(LED_num, pixels.Color(0,0,0,20));
   pixels.show();
 }
 

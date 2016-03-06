@@ -26,7 +26,7 @@
 #define TIMER_BACKUP                14
 #define BACKUP_PULSE                100
 #define DRIVE_SPEED                 70
-#define LINE_SPEED                  90
+#define LINE_SPEED                  80
 #define SIDE_BIN_DISTANCE           18
 #define BACK_ORIENT_DISTANCE        30
 
@@ -41,7 +41,7 @@ static const uint8_t STATE_6  = 6;
 static const uint8_t STATE_7  = 7;
 static const uint8_t STATE_8  = 8;
 
-static const float ARCH = .66;
+static const float ARCH = .30;
 static const float LINE_FOLLOWING_RATIO = .1; //the lower the less jittery
 static const float START_ARCHING_DISTANCE = 45;
 
@@ -64,7 +64,7 @@ void setup() {
   init_light_ring();
   init_line_sensor();
   init_motors();
-  init_token_deploy();
+  //init_token_deploy();
   init_token_sensors();
   deployment_home();
   start_ending_timer();
@@ -75,6 +75,7 @@ void setup() {
 void loop() {
   //start_up();
   Serial.println(state);
+  indicator_clear();
   indicator_LED_on(state);
   switch (state) {
     case (STATE_1):
@@ -114,6 +115,7 @@ void loop() {
         T4_4 ();
       }
     break;
+    //states 4 and 5 are line following
     case (STATE_5):
       if(back_distance_sensor() < 40){
         T5_7();
@@ -142,6 +144,7 @@ void loop() {
         T6_6 ();
       }
     break;
+    //states 7 and 8 are also line following
     case (STATE_7):
       if(line_under_right()){
         T7_8();
@@ -152,7 +155,7 @@ void loop() {
       }
     break;
     case (STATE_8):
-      if(line_under_rear()){
+      if(line_under_rear() && !line_under_right()){
         T8_7();
       }
       if (buttonEvent() | competition_ended()) {
@@ -160,6 +163,7 @@ void loop() {
       } else {
         T8_8();
       }
+      break;
     default:
       state = STATE_1;
     break;
@@ -194,7 +198,7 @@ static void T2_3 (void) {
 
 static void T3_3 (void) {
   if(back_distance_sensor() < START_ARCHING_DISTANCE){
-    drive(-DRIVE_SPEED, -(DRIVE_SPEED/ARCH) );
+    drive(-DRIVE_SPEED, -(DRIVE_SPEED * ARCH) );
   } else{
     drive(-(DRIVE_SPEED + 2), -DRIVE_SPEED);  //temp
   }
@@ -243,6 +247,7 @@ static void T6_5 (void){
 }
 
 static void T7_6(void){
+  indicator_clear();
   state = STATE_6;//change line following ratio
 }
 
@@ -278,7 +283,7 @@ static bool orientedCorrectly (void) {
 static bool binTrigger (void) {
   uint8_t side_current = side_distance_sensor();
   if ((side_current > SIDE_BIN_DISTANCE) && (side_previous < SIDE_BIN_DISTANCE) && TMRArd_IsTimerExpired(TIMER_DEPLOY)) {
-    indicator_blanket_set(50,0,0,0);
+    //indicator_blanket_set(50,0,0,0);
     side_previous = side_current;
     TMRArd_InitTimer (TIMER_DEPLOY, DEPLOY_PULSE);
     return true;
