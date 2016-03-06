@@ -33,6 +33,9 @@ void init_distance_sensor (void){
 //Returns distance in centimeters
 uint8_t front_distance_sensor (void){
   uint16_t rawValue = analogRead(LONG_DISTANCE_SENSOR_PIN_0);
+  rawValue += analogRead(LONG_DISTANCE_SENSOR_PIN_0);
+  rawValue += analogRead(LONG_DISTANCE_SENSOR_PIN_0);
+  rawValue /= 3;
   return (analogToCMMapping (LONG_RANGE, rawValue));
 }
 
@@ -40,6 +43,9 @@ uint8_t front_distance_sensor (void){
 //Returns distance in centimeters
 uint8_t back_distance_sensor (void){
   uint16_t rawValue = analogRead(LONG_DISTANCE_SENSOR_PIN_1);
+  rawValue += analogRead(LONG_DISTANCE_SENSOR_PIN_1);
+  rawValue += analogRead(LONG_DISTANCE_SENSOR_PIN_1);
+  rawValue /= 3;
   return (analogToCMMapping (LONG_RANGE, rawValue));
 }
 
@@ -47,6 +53,9 @@ uint8_t back_distance_sensor (void){
 //Returns distance in centimeters
 uint8_t side_distance_sensor (void){
   uint16_t rawValue = analogRead(SHORT_DISTANCE_SENSOR_PIN);
+  rawValue += analogRead(SHORT_DISTANCE_SENSOR_PIN);
+  rawValue += analogRead(SHORT_DISTANCE_SENSOR_PIN);
+  rawValue /= 3;
   return (analogToCMMapping (SHORT_RANGE, rawValue));
 }
 
