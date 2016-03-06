@@ -32,10 +32,12 @@ void init_distance_sensor (void){
 //CONFIRMED WORKING (3/3), NHS
 //Returns distance in centimeters
 uint8_t front_distance_sensor (void){
-  uint16_t rawValue = analogRead(LONG_DISTANCE_SENSOR_PIN_0);
-  rawValue += analogRead(LONG_DISTANCE_SENSOR_PIN_0);
-  rawValue += analogRead(LONG_DISTANCE_SENSOR_PIN_0);
-  rawValue /= 3;
+  int rawValue = 0;
+  int i = 0;
+  for(; i < 5; i++){
+    rawValue += analogRead(LONG_DISTANCE_SENSOR_PIN_0);
+  }
+  rawValue /= i;
   return (analogToCMMapping (LONG_RANGE, rawValue));
 }
 
@@ -43,19 +45,25 @@ uint8_t front_distance_sensor (void){
 //Returns distance in centimeters
 uint8_t back_distance_sensor (void){
   uint16_t rawValue = analogRead(LONG_DISTANCE_SENSOR_PIN_1);
-  rawValue += analogRead(LONG_DISTANCE_SENSOR_PIN_1);
-  rawValue += analogRead(LONG_DISTANCE_SENSOR_PIN_1);
-  rawValue /= 3;
+  rawValue = 0;
+  int i = 0;
+  for(; i < 5; i++){
+    rawValue += analogRead(LONG_DISTANCE_SENSOR_PIN_1);
+  }
+
+  rawValue /= i;
   return (analogToCMMapping (LONG_RANGE, rawValue));
 }
 
 //CONFIRMED WORKING (3/3), NHS
 //Returns distance in centimeters
 uint8_t side_distance_sensor (void){
-  uint16_t rawValue = analogRead(SHORT_DISTANCE_SENSOR_PIN);
-  rawValue += analogRead(SHORT_DISTANCE_SENSOR_PIN);
-  rawValue += analogRead(SHORT_DISTANCE_SENSOR_PIN);
-  rawValue /= 3;
+  int rawValue = 0;
+  int i = 0;
+  for(; i < 5; i++){
+    rawValue += analogRead(SHORT_DISTANCE_SENSOR_PIN);
+  }
+  rawValue /= i;
   return (analogToCMMapping (SHORT_RANGE, rawValue));
 }
 
