@@ -21,7 +21,7 @@
 #define LINE_SENSOR_PIN_1           A4
 
 /*--------------------------------Definitions----------------------------------*/
-#define TIMER_DEPLOY                9
+#define TIMER_DEPLOY                4
 #define DEPLOY_PULSE                500
 #define TIMER_BACKUP                14
 #define BACKUP_PULSE                100
@@ -41,8 +41,8 @@ static const uint8_t STATE_6  = 6;
 static const uint8_t STATE_7  = 7;
 static const uint8_t STATE_8  = 8;
 
-static const float ARCH = .5;
-static const float LINE_FOLLOWING_RATIO = .3;
+static const float ARCH = .66;
+static const float LINE_FOLLOWING_RATIO = .1; //the lower the less jittery
 static const float START_ARCHING_DISTANCE = 45;
 
 /*---------------------------Module Variables--------------------------------*/
@@ -75,6 +75,7 @@ void setup() {
 void loop() {
   //start_up();
   Serial.println(state);
+  indicator_LED_on(state);
   switch (state) {
     case (STATE_1):
       if (buttonEvent()) {
@@ -114,8 +115,10 @@ void loop() {
       }
     break;
     case (STATE_5):
-      if(binTrigger()){
-        
+      if(back_distance_sensor() < 40){
+        T5_7();
+      }else if(binTrigger()){
+          deploy_tokens(1);
       }
       if (line_under_rear()) {
         T5_6 ();
@@ -126,7 +129,12 @@ void loop() {
       }
     break;
     case (STATE_6):
-      if (line_under_right() && !line_under_rear()){
+      //end of line
+      if(back_distance_sensor() < 40){
+        T6_7();
+      }else if(binTrigger()){
+          deploy_tokens(1);
+      } else if (line_under_right() && !line_under_rear()){
         T6_5 ();
       } else if (buttonEvent() | competition_ended()) {
         TX_1 ();
@@ -135,8 +143,7 @@ void loop() {
       }
     break;
     case (STATE_7):
-    while(1);
-      if (binTrigger()) {
+      if(line_under_right()){
         T7_8();
       } else if (buttonEvent() | competition_ended()) {
         TX_1 ();
@@ -145,13 +152,14 @@ void loop() {
       }
     break;
     case (STATE_8):
+      if(line_under_rear()){
+        T8_7();
+      }
       if (buttonEvent() | competition_ended()) {
         TX_1 ();
       } else {
-        T8_7();
+        T8_8();
       }
-//    case (STATE_9):
-//      //delay a bit     
     default:
       state = STATE_1;
     break;
@@ -166,15 +174,12 @@ static void TX_1 (void){
 }
 
 static void T1_1 (void) {
-  indicator_pulse();
   state = STATE_1;
 }
 
 static void T1_2 (void) {
   start_ending_timer ();
-  indicator_clear ();
   deployment_home ();
-  indicator_blanket_set(50, 50, 0, 0);
   state = STATE_2;
 }
 
@@ -184,7 +189,6 @@ static void T2_2 (void) {
 }
 
 static void T2_3 (void) {
-  indicator_blanket_set(50, 0, 50, 0);
   state = STATE_3;
 }
 
@@ -199,12 +203,10 @@ static void T3_3 (void) {
 
 static void T3_4 (void) {
   TMRArd_InitTimer(TIMER_BACKUP, BACKUP_PULSE);
-  indicator_blanket_set(0, 0, 50, 50);
   state = STATE_4;
 }
 
 static void T4_5 (void) {
-  indicator_blanket_set(10, 10, 10, 10);
   state = STATE_5;
 }
 
@@ -220,8 +222,15 @@ static void T5_5 (void) {
 
 static void T5_6 (void) {
   stop_motors();
-  indicator_blanket_set(0, 50, 0, 10);
   state = STATE_6;
+}
+
+static void T5_7 (void) {
+  state = STATE_7;
+}
+
+static void T6_7 (void) {
+  state = STATE_7;
 }
 
 static void T6_6 (void) {
@@ -233,19 +242,21 @@ static void T6_5 (void){
   state = STATE_5;
 }
 
+static void T7_6(void){
+  state = STATE_6;//change line following ratio
+}
+
 static void T7_7 (void) {
-  if (!line_under_rear()) {
-    drive (-(LINE_SPEED),-LINE_SPEED);
-  } else if (!line_under_rear() & !line_under_right()) {
-    drive (-(LINE_SPEED-5),-LINE_SPEED);
-  } else {
-    drive (-(LINE_SPEED+1), -(LINE_SPEED+12));
-  }
+  drive(-LINE_SPEED, 0);
   state = STATE_7;
 }
 
 static void T7_8 (void) {
-  deploy_tokens(1);
+  state = STATE_8;
+}
+
+static void T8_8 (void) {
+  drive(0, -LINE_SPEED);
   state = STATE_8;
 }
 
@@ -267,6 +278,7 @@ static bool orientedCorrectly (void) {
 static bool binTrigger (void) {
   uint8_t side_current = side_distance_sensor();
   if ((side_current > SIDE_BIN_DISTANCE) && (side_previous < SIDE_BIN_DISTANCE) && TMRArd_IsTimerExpired(TIMER_DEPLOY)) {
+    indicator_blanket_set(50,0,0,0);
     side_previous = side_current;
     TMRArd_InitTimer (TIMER_DEPLOY, DEPLOY_PULSE);
     return true;
