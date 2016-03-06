@@ -25,10 +25,10 @@
 #define DEPLOY_PULSE                500
 #define TIMER_BACKUP                14
 #define BACKUP_PULSE                100
-#define DRIVE_SPEED                 30
-#define LINE_SPEED                  30
+#define DRIVE_SPEED                 70
+#define LINE_SPEED                  90
 #define SIDE_BIN_DISTANCE           18
-#define FRONT_ORIENT_DISTANCE       120
+#define BACK_ORIENT_DISTANCE        30
 
 /*---------------------------Function prototypes-------------------------------*/
 /*---------------------------Constants---------------------------------------*/
@@ -41,9 +41,13 @@ static const uint8_t STATE_6  = 6;
 static const uint8_t STATE_7  = 7;
 static const uint8_t STATE_8  = 8;
 
+static const float ARCH = .5;
+static const float LINE_FOLLOWING_RATIO = .3;
+static const float START_ARCHING_DISTANCE = 45;
+
 /*---------------------------Module Variables--------------------------------*/
 uint8_t state;
-uint8_t front_previous = FRONT_ORIENT_DISTANCE + 1;
+uint8_t back_previous = BACK_ORIENT_DISTANCE + 1;
 uint8_t side_previous;
 uint8_t button_previous;
 extern const char FORWARD;
@@ -77,7 +81,7 @@ void loop() {
         T1_2 ();
         deployment_home();
       } else {
-        T1_1 ();
+        TX_1 ();
       }
     break;
     case (STATE_2):
@@ -85,59 +89,64 @@ void loop() {
         T2_3 ();
       } else if (competition_ended() | buttonEvent()) {
         Serial.println("back");
-        T2_1 ();
+        TX_1 ();
       } else {
         T2_2 ();
       }
     break;
     case (STATE_3):
-      if (line_under_right()) {
+      if (line_under_right ()) {
+        //hit line for first time
         T3_4 ();
       } else if (buttonEvent() | competition_ended()) {
-        T3_1 ();
+        TX_1 ();
       } else {
         T3_3 ();
       }
     break;
     case (STATE_4):
-      if (TMRArd_IsTimerExpired(TIMER_BACKUP)) {
+      if (line_under_rear()) {
         T4_5 ();
       } else if (buttonEvent() | competition_ended()) {
-        T4_1 ();
+        TX_1 ();
       } else {
         T4_4 ();
       }
     break;
     case (STATE_5):
+      if(binTrigger()){
+        
+      }
       if (line_under_rear()) {
         T5_6 ();
       } else if (buttonEvent() | competition_ended()) {
-        T5_1 ();
+        TX_1 ();
       } else {
         T5_5 ();
       }
     break;
     case (STATE_6):
-      if (line_under_left()){
-        T6_7 ();
+      if (line_under_right() && !line_under_rear()){
+        T6_5 ();
       } else if (buttonEvent() | competition_ended()) {
-        T6_1 ();
+        TX_1 ();
       } else{
-        T6_7 ();
+        T6_6 ();
       }
     break;
     case (STATE_7):
+    while(1);
       if (binTrigger()) {
         T7_8();
       } else if (buttonEvent() | competition_ended()) {
-        T7_1 ();
+        TX_1 ();
       } else {
         T7_7();
       }
     break;
     case (STATE_8):
       if (buttonEvent() | competition_ended()) {
-        T8_1 ();
+        TX_1 ();
       } else {
         T8_7();
       }
@@ -150,6 +159,12 @@ void loop() {
 }
 
 /*---------------------------Transition Functions----------------------------*/
+static void TX_1 (void){
+  stop_motors ();
+  deployment_home ();
+  state = STATE_1;
+}
+
 static void T1_1 (void) {
   indicator_pulse();
   state = STATE_1;
@@ -163,14 +178,8 @@ static void T1_2 (void) {
   state = STATE_2;
 }
 
-static void T2_1 (void) {
-  stop_motors ();
-  deployment_home ();
-  state = STATE_1;
-}
-
 static void T2_2 (void) {
-  drive (DRIVE_SPEED, -DRIVE_SPEED);
+  drive (-DRIVE_SPEED, DRIVE_SPEED);
   state = STATE_2;
 }
 
@@ -179,14 +188,12 @@ static void T2_3 (void) {
   state = STATE_3;
 }
 
-static void T3_1 (void) {
-  stop_motors ();
-  deployment_home ();
-  state = STATE_1;
-}
-
 static void T3_3 (void) {
-  drive(DRIVE_SPEED * 1.1, DRIVE_SPEED);  //temp
+  if(back_distance_sensor() < START_ARCHING_DISTANCE){
+    drive(-DRIVE_SPEED, -(DRIVE_SPEED/ARCH) );
+  } else{
+    drive(-(DRIVE_SPEED + 2), -DRIVE_SPEED);  //temp
+  }
   state = STATE_3;
 }
 
@@ -196,31 +203,19 @@ static void T3_4 (void) {
   state = STATE_4;
 }
 
-static void T4_1 (void) {
-  stop_motors ();
-  deployment_home ();
-  state = STATE_1;
-}
-
 static void T4_5 (void) {
   indicator_blanket_set(10, 10, 10, 10);
   state = STATE_5;
 }
 
 static void T4_4 (void) {
-  drive(DRIVE_SPEED +20, DRIVE_SPEED +20);
+  drive(-LINE_SPEED, 0);
   state = STATE_4;
 }
 
 static void T5_5 (void) {
-  drive (DRIVE_SPEED, 0);
+  drive (-LINE_SPEED, -LINE_SPEED * LINE_FOLLOWING_RATIO);
   state = STATE_5;
-}
-
-static void T5_1 (void) {
-  stop_motors ();
-  deployment_home ();
-  state = STATE_1;
 }
 
 static void T5_6 (void) {
@@ -229,33 +224,20 @@ static void T5_6 (void) {
   state = STATE_6;
 }
 
-static void T6_1 (void) {
-  stop_motors ();
-  deployment_home ();
-  state = STATE_1;
-}
-
 static void T6_6 (void) {
-  drive (DRIVE_SPEED-10, (DRIVE_SPEED-10));
+  drive (-LINE_SPEED * LINE_FOLLOWING_RATIO, -LINE_SPEED);
   state = STATE_6;
 }
 
-static void T6_7 (void){
-  drive (-(DRIVE_SPEED), -(DRIVE_SPEED-10)); 
-  state = STATE_7;
-}
-
-static void T7_1 (void) {
-  stop_motors ();
-  deployment_home ();
-  state = STATE_1;
+static void T6_5 (void){
+  state = STATE_5;
 }
 
 static void T7_7 (void) {
   if (!line_under_rear()) {
-    drive (-(LINE_SPEED-8),0);
+    drive (-(LINE_SPEED),-LINE_SPEED);
   } else if (!line_under_rear() & !line_under_right()) {
-    drive (-(LINE_SPEED-12),0);
+    drive (-(LINE_SPEED-5),-LINE_SPEED);
   } else {
     drive (-(LINE_SPEED+1), -(LINE_SPEED+12));
   }
@@ -267,24 +249,18 @@ static void T7_8 (void) {
   state = STATE_8;
 }
 
-static void T8_1 (void) {
-  stop_motors ();
-  deployment_home ();
-  state = STATE_1;
-}
-
 static void T8_7 (void) {
   state = STATE_7;
 }
 
 /*-----------------------------Helper Functions------------------------------*/
 static bool orientedCorrectly (void) {
-  uint8_t front_current = front_distance_sensor();
-  if ((front_current > FRONT_ORIENT_DISTANCE) && (front_previous < FRONT_ORIENT_DISTANCE)) {
-    front_previous = front_current;
+  uint8_t back_current = back_distance_sensor();
+  if ((back_current > BACK_ORIENT_DISTANCE) && (back_previous < BACK_ORIENT_DISTANCE)) {
+    back_previous = back_current;
     return true;
   }
-  front_previous = front_current;
+  back_previous = back_current;
   return false;
 }
 
@@ -314,7 +290,7 @@ static void haltCode (void) {
   while(1);
 }
 
-int miniState = 0;
+int miniState = 3;
 int rotSpd = 10;
 void start_up(){
   while(!button_state());

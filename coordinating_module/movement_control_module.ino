@@ -11,9 +11,9 @@ const char REVERSE                        = 1;
 const char RIGHT_MOTOR                    = 0;
 const char LEFT_MOTOR                     = 1;
 static const uint8_t MAX_PULSE            = 255;
-//this is a multiplier gets us a slope of .08 leftward (where 0 is perfectly straight)
 //right motor * motor offset = left motor
-static const float MOTOR_OFFSET         = 1.045; 
+//increase when left is lagging
+static const float MOTOR_OFFSET         = 1.000; 
 
 /*---------------------------Module Variables--------------------------------*/
 uint8_t left_motor_speed = 0;
@@ -53,6 +53,7 @@ void stop_motors (void) {
 
 //CONFIRMED WORKING (3/3), NHS
 static void set_motor_speed (char motor, uint8_t motorSpeed, uint8_t motorDirection) {
+  if(motorSpeed > MAX_SPEED) motorSpeed = MAX_SPEED;
   uint8_t pulseLength = 0;
   if (motor == LEFT_MOTOR){
     if(motorDirection == FORWARD){
