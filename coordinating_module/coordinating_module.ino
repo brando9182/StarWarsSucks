@@ -302,6 +302,7 @@ static void haltCode (void) {
   while(1);
 }
 
+/*---------------------------Start-up State Machine-----------------------------*/
 int miniState = 3;
 int rotSpd = 10;
 void start_up(){
@@ -320,19 +321,16 @@ void start_up(){
     Serial.println("---------------");
     delay(250);
     if(miniState == 0 && (front_distance_sensor() + back_distance_sensor()) < 120){
-      set_motor_speed (LEFT_MOTOR, 40, FORWARD);
-      set_motor_speed (RIGHT_MOTOR, 40, FORWARD);
+      drive (40, 40);
       miniState = 1;
     }
     //turning
     if(miniState == 1 && front_distance_sensor() < 100){
-      set_motor_speed (LEFT_MOTOR, 30, FORWARD);
-      set_motor_speed (RIGHT_MOTOR, 40, FORWARD);
+      drive (30, 40);
       miniState = 2;
     }
     if(miniState == 2 && side_distance_sensor() < 4 && back_distance_sensor() < 20){
-      set_motor_speed(LEFT_MOTOR, 10, FORWARD);
-      set_motor_speed(RIGHT_MOTOR, 10, FORWARD);
+      drive (10, 10);
       miniState == 3;
       //do something else
     }
@@ -341,8 +339,7 @@ void start_up(){
     }
   }
   Serial.println("startup");
-     // set_motor_speed (LEFT_MOTOR, 80, FORWARD);
-     // set_motor_speed (RIGHT_MOTOR, 80, FORWARD);
+  // drive (80, 80);
   //stop_motors();
   while(1);
 }
